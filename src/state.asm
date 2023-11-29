@@ -36,6 +36,22 @@
             STA ParamYPos
             JSR Objects::Add
 
+            LDA #ObjectType::CHEST_CLOSED_L
+            STA ParamType
+            LDA #24
+            STA ParamXPos
+            LDA #40
+            STA ParamYPos
+            JSR Objects::Add
+
+            LDA #ObjectType::CHEST_CLOSED_S
+            STA ParamType
+            LDA #16
+            STA ParamXPos
+            LDA #80
+            STA ParamYPos
+            JSR Objects::Add
+
         Main:
             JSR GFX::DisablePPURendering
             JSR GFX::LoadPalette

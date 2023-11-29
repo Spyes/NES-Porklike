@@ -107,7 +107,7 @@
                     CMP #%11111111
                     BEQ @NoObjectLeft
                         TAX
-                        JSR Objects::Remove
+                        JSR Objects::Bump
                         LDA PlayerX
                         CLC
                         ADC #8
@@ -155,7 +155,7 @@
                     CMP #%11111111
                     BEQ @NoObjectRight
                         TAX
-                        JSR Objects::Remove
+                        JSR Objects::Bump
                         LDA PlayerX
                         SEC
                         SBC #8
@@ -200,7 +200,7 @@
                     CMP #%11111111
                     BEQ @NoObjectUp
                         TAX
-                        JSR Objects::Remove
+                        JSR Objects::Bump
                         LDA PlayerY
                         CLC
                         ADC #8
@@ -245,7 +245,7 @@
                     CMP #%11111111
                     BEQ @NoObjectDown
                         TAX
-                        JSR Objects::Remove
+                        JSR Objects::Bump
                         LDA PlayerY
                         SEC
                         SBC #8

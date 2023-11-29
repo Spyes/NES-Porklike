@@ -98,7 +98,7 @@ IRQ:
 
 PaletteData:
     .byte $0F,$00,$10,$20, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$17,$27,$37    ; Background
-    .byte $0F,$00,$10,$20, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$0F,$29,$39    ; Sprite
+    .byte $0F,$00,$10,$39, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$0F,$29,$39    ; Sprite
 
 BackgroundData:
 .incbin "./assets/porklike.nam"

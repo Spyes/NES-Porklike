@@ -33,16 +33,6 @@
             RTS
     .endproc
 
-    ;; Remove object at position X by setting type to NULL
-    .proc Remove
-        CPX #MAX_OBJECTS * .sizeof(SObject)
-        BCS :+      ; Make sure X <= MAX_OBJECTS
-            LDA #ObjectType::NULL
-            STA ObjectsArray+SObject::Type,X
-        :
-        RTS
-    .endproc
-
     .proc Draw
         LDA #$02
         STA SprPtr+1
@@ -60,7 +50,7 @@
             STA ParamYPos
             LDA ObjectsArray+SObject::Type,X
             STA ParamTileNum
-            LDA #%00000011
+            LDA #%00000000
             STA ParamAttribs
             LDA ObjectsArray+SObject::XPos,X
             STA ParamXPos
@@ -132,4 +122,37 @@
         RTS
     .endproc
 
+    .proc Bump
+        CPX #MAX_OBJECTS * .sizeof(SObject)
+        BCS @EndRoutine      ; Make sure X <= MAX_OBJECTS
+
+        LDA ObjectsArray+SObject::Type,X
+
+        @ChestL:
+            CMP #ObjectType::CHEST_CLOSED_L
+            BNE :+
+                LDA #ObjectType::CHEST_OPEN_L
+                JMP @SetType
+            :
+            CMP #ObjectType::CHEST_OPEN_L
+            BEQ @EndRoutine
+
+        @ChestS:
+            CMP #ObjectType::CHEST_CLOSED_S
+            BNE :+
+                LDA #ObjectType::CHEST_OPEN_S
+                JMP @SetType
+            :
+            CMP #ObjectType::CHEST_OPEN_S
+            BEQ @EndRoutine
+
+        @Remove:
+            LDA #ObjectType::NULL
+
+        @SetType:
+            STA ObjectsArray+SObject::Type,X
+
+        @EndRoutine:
+            RTS
+    .endproc
 .endscope
