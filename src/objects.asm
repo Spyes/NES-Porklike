@@ -128,6 +128,13 @@
 
         LDA ObjectsArray+SObject::Type,X
 
+        @Tablet:
+            CMP #ObjectType::TABLET
+            BNE :+
+                JMP @EndRoutine
+            :
+
+        ;; TODO: Open chests should be background tiles with collision
         @ChestL:
             CMP #ObjectType::CHEST_CLOSED_L
             BNE :+

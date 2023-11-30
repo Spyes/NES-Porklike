@@ -44,11 +44,19 @@
             STA ParamYPos
             JSR Objects::Add
 
-            LDA #ObjectType::CHEST_CLOSED_S
+            LDA #ObjectType::VASE_L
             STA ParamType
             LDA #16
             STA ParamXPos
             LDA #80
+            STA ParamYPos
+            JSR Objects::Add
+
+            LDA #ObjectType::CHEST_CLOSED_S
+            STA ParamType
+            LDA #24
+            STA ParamXPos
+            LDA #96
             STA ParamYPos
             JSR Objects::Add
 
