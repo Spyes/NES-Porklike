@@ -89,7 +89,7 @@
                 STA PlayerX
                 LDX PlayerX
                 LDY PlayerY
-                JSR Collision::IsXYSolid
+                JSR Map::IsXYSolid
                 BEQ @NoCollisionLeft
                     LDA PlayerX
                     CLC
@@ -137,7 +137,7 @@
                 STA PlayerX
                 LDX PlayerX
                 LDY PlayerY
-                JSR Collision::IsXYSolid
+                JSR Map::IsXYSolid
                 BEQ @NoCollisionRight
                     LDA PlayerX
                     SEC
@@ -182,7 +182,7 @@
                 STA PlayerY
                 LDX PlayerX 
                 LDY PlayerY
-                JSR Collision::IsXYSolid
+                JSR Map::IsXYSolid
                 BEQ @NoCollisionUp
                     LDA PlayerY
                     CLC
@@ -227,7 +227,7 @@
                 STA PlayerY
                 LDX PlayerX
                 LDY PlayerY
-                JSR Collision::IsXYSolid
+                JSR Map::IsXYSolid
                 BEQ @NoCollisionDown
                     LDA PlayerY
                     SEC

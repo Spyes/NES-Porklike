@@ -14,4 +14,6 @@
     Type        .byte
     XPos        .byte
     YPos        .byte
+    Metadata_LO .byte
+    Metadata_HI .byte
 .endstruct

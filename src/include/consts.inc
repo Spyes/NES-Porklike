@@ -58,4 +58,4 @@ TRUE            = $01
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Game constants
 ;;;;;;;;;;;;;;;;;;;;;;
-MAX_OBJECTS     = $14   ; 20 max objects
+MAX_OBJECTS     = $20   ; 32 max objects - 160 bytes

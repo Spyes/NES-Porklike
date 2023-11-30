@@ -28,11 +28,18 @@
             STA ObjectsArray+SObject::XPos,X
             LDA ParamYPos
             STA ObjectsArray+SObject::YPos,X
+            LDA ParamMetadata_LO
+            STA ObjectsArray+SObject::Metadata_LO,X
+            LDA ParamMetadata_HI
+            STA ObjectsArray+SObject::Metadata_HI,X
 
         @EndRoutine:
             RTS
     .endproc
 
+    ;; TODO: Draw objects as background tiles instead of sprites
+    ;; IsXYSolid should return true and set A (or different variable) to Tile ID (object type)
+    ;; or -1 if it's not an interactable object
     .proc Draw
         LDA #$02
         STA SprPtr+1

@@ -16,49 +16,8 @@
             STA Clock60
             STA PrevOAMCount
 
-            JSR Collision::Init
+            JSR Map::Init
             JSR Player::Init
-
-            ;; TODO automatically add objects from nametable
-            LDA #ObjectType::DOOR
-            STA ParamType
-            LDA #40
-            STA ParamXPos
-            LDA #24
-            STA ParamYPos
-            JSR Objects::Add
-
-            LDA #ObjectType::DOOR
-            STA ParamType
-            LDA #24
-            STA ParamXPos
-            LDA #64
-            STA ParamYPos
-            JSR Objects::Add
-
-            LDA #ObjectType::CHEST_CLOSED_L
-            STA ParamType
-            LDA #24
-            STA ParamXPos
-            LDA #40
-            STA ParamYPos
-            JSR Objects::Add
-
-            LDA #ObjectType::VASE_L
-            STA ParamType
-            LDA #16
-            STA ParamXPos
-            LDA #80
-            STA ParamYPos
-            JSR Objects::Add
-
-            LDA #ObjectType::CHEST_CLOSED_S
-            STA ParamType
-            LDA #24
-            STA ParamXPos
-            LDA #96
-            STA ParamYPos
-            JSR Objects::Add
 
         Main:
             JSR GFX::DisablePPURendering

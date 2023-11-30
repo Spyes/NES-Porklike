@@ -31,11 +31,14 @@ ParamYPos:          .res 1
 ParamAttribs:       .res 1
 ParamTileNum:       .res 1
 ParamType:          .res 1
+ParamMetadata_LO:   .res 1
+ParamMetadata_HI:   .res 1
 
 ;; Pointers
 BgPtr:              .res 2      ; Reserve 2 bytes (16 bits) to store a pointer to the background address (address are always 2 bytes)
 BuffPtr:            .res 2      ; Pointer to the background buffer address - 16bits (lo,hi)
 SprPtr:             .res 2
+TextPtr:            .res 2
 
 ;; Temp
 Temp:               .res 1
@@ -47,8 +50,9 @@ Temp:               .res 1
 
 .include "gfx.asm"
 .include "joypad.asm"
-.include "collision.asm"
 .include "objects.asm"
+.include "map.asm"
+.include "text.asm"
 .include "player.asm"
 .include "state.asm"
 
@@ -162,6 +166,8 @@ CollisionMask:
     .byte %00000100
     .byte %00000010
     .byte %00000001
+
+.include "./assets/texts.inc"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Here we add the CHR-ROM data, included from an external .CHR file
