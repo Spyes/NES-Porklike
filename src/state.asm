@@ -1,14 +1,7 @@
 .scope State
-
-    .enum States
-        TITLESCREEN
-        GAMEPLAY
-        GAMEOVER
-    .endenum
-
     .proc GamePlay
-        InitVariables:
-            LDA States::GAMEPLAY
+        @InitVariables:
+            LDA #States::GAMEPLAY
             STA GameState
 
             LDA #0
@@ -19,7 +12,7 @@
             JSR Map::Init
             JSR Player::Init
 
-        Main:
+        @Main:
             JSR GFX::DisablePPURendering
             JSR GFX::LoadPalette
 
@@ -32,21 +25,34 @@
             JSR GFX::LoadSprites
             JSR GFX::EnablePPURendering
 
-        GameLoop:
+        @GameLoop:
             LDA Buttons
             STA PrevButtons
             JSR Joypad::ReadController
 
-        Update:
+        @Update:
+            LDA GameState
+            CMP #States::PAUSED
+            BEQ @Paused
             JSR Player::Update
+            JMP @Draw
 
-        Draw:
+        @Paused:
+            LDA Buttons
+            AND #BUTTON_START
+            BEQ @NotStartButton
+                JSR GFX::ClearMessage
+                LDA #States::GAMEPLAY
+                STA GameState
+            @NotStartButton:
+
+        @Draw:
             JSR Player::Draw
             JSR Objects::Draw
 
         WAIT_FOR_VBLANK
 
-        JMP GameLoop
+        JMP @GameLoop
     .endproc
 
 .endscope

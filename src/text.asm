@@ -1,5 +1,21 @@
 .scope Text
 
+    .proc Length
+        LDY #0
+        @Loop:
+            LDA (ParamPtr),Y            ; LDA sets the Z flag if the result is 0
+            BEQ @Break                  ; if A is zero (Z-flag is 1) break out of loop
+
+        @DrawLetter:
+            STA PPU_DATA
+        @NextLetter:
+            INY                         ; Y++
+            JMP @Loop
+
+        @Break:
+        RTS
+    .endproc
+
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Subroutine to load text in the nametable until it finds a 0-terminator
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -12,7 +28,7 @@
 
         LDY #0
         @Loop:
-            LDA (TextPtr),Y            ; LDA sets the Z flag if the result is 0
+            LDA (ParamPtr),Y            ; LDA sets the Z flag if the result is 0
             BEQ @Break                  ; if A is zero (Z-flag is 1) break out of loop
 
         @DrawLetter:

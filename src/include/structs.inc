@@ -17,3 +17,12 @@
     Metadata_LO .byte
     Metadata_HI .byte
 .endstruct
+
+
+.enum States
+    TITLESCREEN
+    GAMEPLAY
+    PAUSED
+    GAMEOVER
+.endenum
+

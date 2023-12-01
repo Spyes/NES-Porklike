@@ -84,7 +84,7 @@
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Subroutine to draw tiles in the background using buffering
-    ;; Params - X
+    ;; Params - ParamLength, ParamPtr
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Buffer format starting at memory address $0700:
     ;;
@@ -99,7 +99,7 @@
     ;;  |   PPU address $2052
     ;;  Length=3
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    .proc BufferTiles
+    .proc BufferMessage
         LDA #$07
         STA BuffPtr+1
         LDA #$00
@@ -107,24 +107,67 @@
 
         LDY #0                  ; Index in pointer
 
-        LDA #1                  ; Legth = 1 (how many bytes we will send)
+        LDA ParamLength         ; Legth = 1 (how many bytes we will send)
         STA (BuffPtr),Y
         INY                     ; Y++
 
-        LDA #$20
+        LDA ParamXPos
         STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
         INY
-        LDA #$27
+        LDA ParamYPos
         STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
         INY
-    
-        TXA                     ; X holds data to display
-        STA (BuffPtr),Y
-        INY
+
+        LDX #0
+        @Loop:
+            CPX ParamLength
+            BEQ @EndLoop
+            TYA
+            PHA
+            TXA
+            TAY
+            LDA (ParamPtr),Y
+            STA Temp
+            PLA
+            TAY
+            LDA Temp
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop
+        @EndLoop:
 
         LDA #0
         STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
         INY
+
+        RTS
+    .endproc
+
+    .proc ClearMessage
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$00
+        STA BuffPtr+0
+
+        LDY #0
+
+        LDA #100
+        STA (BuffPtr),Y
+        INY
+        INY
+        INY
+
+        LDX #0
+        @Loop:
+            CPX #100
+            BEQ @Break
+            LDA #0
+            STA (BuffPtr),Y
+            INY
+            INX
+            JMP @Loop
+        @Break:
 
         RTS
     .endproc

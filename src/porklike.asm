@@ -33,12 +33,13 @@ ParamTileNum:       .res 1
 ParamType:          .res 1
 ParamMetadata_LO:   .res 1
 ParamMetadata_HI:   .res 1
+ParamLength:        .res 1
+ParamPtr:           .res 2
 
 ;; Pointers
 BgPtr:              .res 2      ; Reserve 2 bytes (16 bits) to store a pointer to the background address (address are always 2 bytes)
 BuffPtr:            .res 2      ; Pointer to the background buffer address - 16bits (lo,hi)
 SprPtr:             .res 2
-TextPtr:            .res 2
 
 ;; Temp
 Temp:               .res 1
@@ -49,10 +50,10 @@ Temp:               .res 1
 .segment "CODE"
 
 .include "gfx.asm"
+.include "text.asm"
 .include "joypad.asm"
 .include "objects.asm"
 .include "map.asm"
-.include "text.asm"
 .include "player.asm"
 .include "state.asm"
 
@@ -76,6 +77,10 @@ OAMStartDMACopy:                ; As soon as we enter the NMI handler, we start 
     LDA #02                     ; Every frame we copy sprite data starting at $02**
     STA PPU_OAM_DMA             ; The OAM DMA copy starts when we write to $4014
 
+BackgroundCopy:
+    JSR GFX::BackgroundCopy
+
+EnablePPURendering:
     JSR GFX::EnablePPURendering
 
 SetGameClock:
