@@ -144,10 +144,6 @@
                 STA ParamPtr+1
                 JSR Text::Length
                 STY ParamLength
-                LDA #$22
-                STA ParamXPos
-                LDA #$42
-                STA ParamYPos
                 JSR GFX::BufferMessage
                 LDA #States::PAUSED
                 STA GameState

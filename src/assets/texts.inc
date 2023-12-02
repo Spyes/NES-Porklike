@@ -1,2 +1,5 @@
+Label:
+        ; "XXXXXXXXXXXXXXXXXX", $0
+
 IntroTablet:
-    .byte "IT'S HAMMER TIME, BITCHES!", $0
+    .byte "    WELCOME TO    ", $0

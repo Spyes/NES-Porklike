@@ -18,7 +18,6 @@
     Metadata_HI .byte
 .endstruct
 
-
 .enum States
     TITLESCREEN
     GAMEPLAY

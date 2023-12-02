@@ -217,10 +217,10 @@
 
         LDA Buttons
         AND #BUTTON_DOWN
-        BEQ :+
+        BEQ @NotDownButton
             LDA PrevButtons
             CMP Buttons
-            BEQ :+
+            BEQ @DownButtonPrevPressed
                 LDA PlayerY
                 CLC
                 ADC #8
@@ -257,8 +257,8 @@
                     LDA #%11111000
                     STA PlayerOffsetY
                     JMP @EndGetInput
-            :
-        :
+            @DownButtonPrevPressed:
+        @NotDownButton:
 
         @EndGetInput:
         RTS
