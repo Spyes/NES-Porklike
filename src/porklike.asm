@@ -31,10 +31,8 @@ ParamYPos:          .res 1
 ParamAttribs:       .res 1
 ParamTileNum:       .res 1
 ParamType:          .res 1
-ParamMetadata_LO:   .res 1
-ParamMetadata_HI:   .res 1
-ParamLength:        .res 1
 ParamPtr:           .res 2
+ParamLine:          .res 1
 
 ;; Pointers
 BgPtr:              .res 2      ; Reserve 2 bytes (16 bits) to store a pointer to the background address (address are always 2 bytes)
@@ -50,7 +48,6 @@ Temp:               .res 1
 .segment "CODE"
 
 .include "gfx.asm"
-.include "text.asm"
 .include "joypad.asm"
 .include "objects.asm"
 .include "map.asm"
@@ -77,7 +74,23 @@ OAMStartDMACopy:                ; As soon as we enter the NMI handler, we start 
     LDA #02                     ; Every frame we copy sprite data starting at $02**
     STA PPU_OAM_DMA             ; The OAM DMA copy starts when we write to $4014
 
-BackgroundCopy:
+TextPanelBackgroundCopy:
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$00
+    STA BuffPtr+0
+    JSR GFX::BackgroundCopy
+
+TextMessageBackgroudCopy:
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$80
+    STA BuffPtr+0
+    JSR GFX::BackgroundCopy
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$50
+    STA BuffPtr+0
     JSR GFX::BackgroundCopy
 
 EnablePPURendering:

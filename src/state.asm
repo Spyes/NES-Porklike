@@ -41,7 +41,8 @@
             LDA Buttons
             AND #BUTTON_START
             BEQ @NotStartButton
-                JSR GFX::ClearMessage
+                JSR GFX::ClearTextPanel
+                JSR GFX::ClearText
                 LDA #States::GAMEPLAY
                 STA GameState
             @NotStartButton:

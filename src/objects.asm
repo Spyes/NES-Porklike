@@ -28,10 +28,6 @@
             STA ObjectsArray+SObject::XPos,X
             LDA ParamYPos
             STA ObjectsArray+SObject::YPos,X
-            LDA ParamMetadata_LO
-            STA ObjectsArray+SObject::Metadata_LO,X
-            LDA ParamMetadata_HI
-            STA ObjectsArray+SObject::Metadata_HI,X
 
         @EndRoutine:
             RTS
@@ -137,18 +133,25 @@
 
         @Tablet:
             CMP #ObjectType::TABLET
-            BNE :+
-                LDA ObjectsArray+SObject::Metadata_LO,X
+            BNE @NotTablet
+                LDA #<IntroTablet
                 STA ParamPtr+0
-                LDA ObjectsArray+SObject::Metadata_HI,X
+                LDA #>IntroTablet
                 STA ParamPtr+1
-                JSR Text::Length
-                STY ParamLength
-                JSR GFX::BufferMessage
+                JSR GFX::BufferLine1Text
+
+                LDA #<IntroTablet2
+                STA ParamPtr+0
+                LDA #>IntroTablet2
+                STA ParamPtr+1
+                JSR GFX::BufferLine2Text
+
+                JSR GFX::BufferTextPanel
+
                 LDA #States::PAUSED
                 STA GameState
                 JMP @EndRoutine
-            :
+            @NotTablet:
 
         ;; TODO: Open chests should be background tiles with collision
         @ChestL:

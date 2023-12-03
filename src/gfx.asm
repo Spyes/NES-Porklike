@@ -5,7 +5,7 @@
     .proc LoadPalette
         LDA #$3F
         STA PPU_ADDR
-        LDA #$00
+        LDA #0
         STA PPU_ADDR
 
         LDY #0
@@ -26,11 +26,11 @@
     .proc LoadNametable
         LDA #$20
         STA PPU_ADDR
-        LDA #$00
+        LDA #0
         STA PPU_ADDR
 
-        LDX #$00                    ; X = 0 -> x is the outer loop index (hi-byte) from $0 to $4
-        LDY #$00                    ; Y = 0 -> y is the inner loop index (lo-byte) from $0 to $FF
+        LDX #0                    ; X = 0 -> x is the outer loop index (hi-byte) from $0 to $4
+        LDY #0                    ; Y = 0 -> y is the inner loop index (lo-byte) from $0 to $FF
 
     OuterLoop:
         InnerLoop:
@@ -83,8 +83,7 @@
     .endproc
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Subroutine to draw tiles in the background using buffering
-    ;; Params - ParamLength, ParamPtr
+    ;; Subroutine to draw tiles in the background using buffering $0700 - $0779
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Buffer format starting at memory address $0700:
     ;;
@@ -99,7 +98,7 @@
     ;;  |   PPU address $2052
     ;;  Length=3
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    .proc BufferMessage
+    .proc BufferTextPanel
         LDA #$07
         STA BuffPtr+1
         LDA #$00
@@ -107,203 +106,170 @@
 
         LDY #0                  ; Index in pointer
 
-        @DrawTextPanel:
-            LDA #20                 ; Length
+    @TopBorder:
+        LDA #TEXT_PANEL_WIDTH+2 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$41
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        ; Left border
+        LDA #$10
+        STA (BuffPtr),Y
+        INY
+
+        ; Top border
+        LDA #$11
+        LDX #0
+        @DrawTopBorder:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndDrawTopBorder
             STA (BuffPtr),Y
             INY
+            INX
+            JMP @DrawTopBorder
+        @EndDrawTopBorder:
 
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$41
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
+        ; Top-right border
+        LDA #$14
+        STA (BuffPtr),Y
+        INY
 
-            ; Left border
-            LDA #$10
+    @LeftBorder1:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$61
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$12
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder1:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$62+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$15
+        STA (BuffPtr),Y
+        INY
+
+    @LeftBorder2:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$81
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$12
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder2:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$82+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$15
+        STA (BuffPtr),Y
+        INY
+
+    @LeftBorder3:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A1
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$12
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder3:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A2+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #$15
+        STA (BuffPtr),Y
+        INY
+
+    @BottomBorder:
+        ; Bottom border
+        LDA #TEXT_PANEL_WIDTH+2 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$C1
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        ; Bottom-left border
+        LDA #$13
+        STA (BuffPtr),Y
+        INY
+
+        ; Bottom border
+        LDA #$17
+        LDX #0
+        @DrawBottomBorder:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndDrawBottomBorder
             STA (BuffPtr),Y
             INY
+            INX
+            JMP @DrawBottomBorder
+        @EndDrawBottomBorder:
 
-            ; Top border
-            LDX #0
-            LDA #$11
-            @DrawTopBorder:
-                CPX #18
-                BEQ @EndDrawTopBorder
-                STA (BuffPtr),Y
-                INY
-                INX
-                JMP @DrawTopBorder
-            @EndDrawTopBorder:
-
-            ; Top-right border
-            LDA #$14
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$61
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$12
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$74
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$15
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$81
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$12
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$94
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$15
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$A1
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$12
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$B4
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$15
-            STA (BuffPtr),Y
-            INY
-
-            ; Bottom border
-            LDA #20                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$C1
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Bottom-left border
-            LDA #$13
-            STA (BuffPtr),Y
-            INY
-
-            ; Bottom border
-            LDX #0
-            LDA #$17
-            @DrawBottomBorder:
-                CPX #18
-                BEQ @EndDrawBottomBorder
-                STA (BuffPtr),Y
-                INY
-                INX
-                JMP @DrawBottomBorder
-            @EndDrawBottomBorder:
-
-            ; Bottom-right border
-            LDA #$16
-            STA (BuffPtr),Y
-            INY
-
-        @DrawText:
-            LDA ParamLength         ; Legth = 1 (how many bytes we will send)
-            STA (BuffPtr),Y
-            INY                     ; Y++
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$62
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            LDX #0
-            @Loop:
-                CPX ParamLength
-                BEQ @EndLoop
-                TYA
-                PHA
-                TXA
-                TAY
-                LDA (ParamPtr),Y
-                STA Temp
-                PLA
-                TAY
-                LDA Temp
-                STA (BuffPtr),Y
-                INX
-                INY
-                JMP @Loop
-            @EndLoop:
+        ; Bottom-right border
+        LDA #$16
+        STA (BuffPtr),Y
+        INY
 
         LDA #0
         STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
@@ -313,208 +279,339 @@
     .endproc
 
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    ;; Subroutine to clear message textbox tiles in the background using buffering
+    ;; Subroutine to draw tiles in the background using buffering $0750 - $0762
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    .proc ClearMessage
+    .proc BufferLine1Text
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$50
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH   ; Legth
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$62                ; First line
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        @Loop:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop
+            TYA
+            PHA
+            TXA
+            TAY
+            LDA (ParamPtr),Y
+            STA Temp
+            PLA
+            TAY
+            LDA Temp
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop
+        @EndLoop:
+
+        LDA #0
+        STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
+        INY
+
+        RTS
+    .endproc
+
+    .proc BufferLine2Text
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$80
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH   ; Legth
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A2                ; First line
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        @Loop:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop
+            TYA
+            PHA
+            TXA
+            TAY
+            LDA (ParamPtr),Y
+            STA Temp
+            PLA
+            TAY
+            LDA Temp
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop
+        @EndLoop:
+
+        LDA #0
+        STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
+        INY
+
+        RTS
+    .endproc
+
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Subroutine to clear message panel tiles in the background using buffering
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    .proc ClearTextPanel
         LDA #$07
         STA BuffPtr+1
         LDA #$00
         STA BuffPtr+0
 
+    @TopBorder:
         LDY #0                  ; Index in pointer
+        LDA #TEXT_PANEL_WIDTH+2 ; Length
+        STA (BuffPtr),Y
+        INY
 
-        @ClearTextPanel:
-            LDA #20                 ; Length
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$41
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+        LDX #0
+        LDA #0
+        @ClearTopBorder:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndClearTopBorder
             STA (BuffPtr),Y
             INY
+            INX
+            JMP @ClearTopBorder
+        @EndClearTopBorder:
 
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$41
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
+        LDA #0
+        STA (BuffPtr),Y
+        INY
 
-            ; Left border
-            LDA #$00
+    @LeftBorder1:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$61
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder1:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$62+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @LeftBorder2:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$81
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder2:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$82+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @LeftBorder3:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A1
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @RightBorder3:
+        LDA #1                 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A2+TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @BottomBorder:
+        LDA #TEXT_PANEL_WIDTH+2 ; Length
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$C1
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        ; Bottom-left border
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+        ; Bottom border
+        LDX #0
+        LDA #0
+        @ClearBottomBorder:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndClearBottomBorder
             STA (BuffPtr),Y
             INY
+            INX
+            JMP @ClearBottomBorder
+        @EndClearBottomBorder:
 
-            ; Top border
-            LDX #0
-            LDA #$00
-            @ClearTopBorder:
-                CPX #18
-                BEQ @EndClearTopBorder
-                STA (BuffPtr),Y
-                INY
-                INX
-                JMP @ClearTopBorder
-            @EndClearTopBorder:
-
-            ; Top-right border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$61
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$74
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$81
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$94
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            ; Left border, empty, right border
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$A1
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Left border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            LDA #1                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$B4
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Right border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            ; Bottom border
-            LDA #20                 ; Length
-            STA (BuffPtr),Y
-            INY
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$C1
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            ; Bottom-left border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-            ; Bottom border
-            LDX #0
-            LDA #$00
-            @ClearBottomBorder:
-                CPX #18
-                BEQ @EndClearBottomBorder
-                STA (BuffPtr),Y
-                INY
-                INX
-                JMP @ClearBottomBorder
-            @EndClearBottomBorder:
-
-            ; Bottom-right border
-            LDA #$00
-            STA (BuffPtr),Y
-            INY
-
-        @ClearText:
-            LDA #18         ; Legth = 1 (how many bytes we will send)
-            STA (BuffPtr),Y
-            INY                     ; Y++
-
-            LDA #$22
-            STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
-            INY
-            LDA #$62
-            STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
-            INY
-
-            LDX #0
-            LDA #$00
-            @Loop:
-                CPX #18
-                BEQ @EndLoop
-                STA (BuffPtr),Y
-                INX
-                INY
-                JMP @Loop
-            @EndLoop:
+        ; Bottom-right border
+        LDA #0
+        STA (BuffPtr),Y
+        INY
 
         LDA #0
         STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
+        INY
+
+        RTS
+    .endproc
+
+    .proc ClearText
+    @ClearLine1:
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$50
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH   ; Legth
+        STA (BuffPtr),Y
+        INY                     ; Y++
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$62
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        LDA #0
+        @Loop1:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop1
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop1
+        @EndLoop1:
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+    @ClearLine2:
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$80
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$A2
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        LDA #0
+        @Loop2:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop2
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop2
+        @EndLoop2:
+
+        LDA #0
+        STA (BuffPtr),Y
         INY
 
         RTS

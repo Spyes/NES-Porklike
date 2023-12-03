@@ -1,5 +1,7 @@
 Label:
-        ; "XXXXXXXXXXXXXXXXXX", $0
+        ; "XXXXXXXXXXXXXX"
 
 IntroTablet:
-    .byte "    WELCOME TO    ", $0
+    .byte "  WELCOME TO  "
+IntroTablet2:
+    .byte "   PORKLIKE!  "

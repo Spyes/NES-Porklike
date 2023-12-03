@@ -58,4 +58,5 @@ TRUE            = $01
 ;;;;;;;;;;;;;;;;;;;;;;
 ;; Game constants
 ;;;;;;;;;;;;;;;;;;;;;;
-MAX_OBJECTS     = $20   ; 32 max objects - 160 bytes
+MAX_OBJECTS         = $20   ; 32 max objects - 160 bytes
+TEXT_PANEL_WIDTH    = $0E 

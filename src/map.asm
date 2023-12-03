@@ -7,9 +7,6 @@
         STA ParamXPos
         LDA #24
         STA ParamYPos
-        LDA #0
-        STA ParamMetadata_LO
-        STA ParamMetadata_HI
 
         JSR Objects::Add
 
@@ -19,9 +16,6 @@
         STA ParamXPos
         LDA #64
         STA ParamYPos
-        LDA #0
-        STA ParamMetadata_LO
-        STA ParamMetadata_HI
         JSR Objects::Add
 
         LDA #ObjectType::TABLET
@@ -30,10 +24,6 @@
         STA ParamXPos
         LDA #40
         STA ParamYPos
-        LDA #<IntroTablet
-        STA ParamMetadata_LO
-        LDA #>IntroTablet
-        STA ParamMetadata_HI
         JSR Objects::Add
 
         LDA #ObjectType::VASE_L
@@ -42,9 +32,6 @@
         STA ParamXPos
         LDA #80
         STA ParamYPos
-        LDA #0
-        STA ParamMetadata_LO
-        STA ParamMetadata_HI
         JSR Objects::Add
 
         LDA #ObjectType::CHEST_CLOSED_S
@@ -53,9 +40,6 @@
         STA ParamXPos
         LDA #96
         STA ParamYPos
-        LDA #0
-        STA ParamMetadata_LO
-        STA ParamMetadata_HI
         JSR Objects::Add
 
         RTS
