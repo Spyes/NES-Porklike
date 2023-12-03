@@ -90,32 +90,27 @@
                 LDX PlayerX
                 LDY PlayerY
                 JSR Map::IsXYSolid
-                BEQ @NoCollisionLeft
-                    LDA PlayerX
-                    CLC
-                    ADC #8
-                    STA PlayerX
-                    LDA #%11111100
-                    STA PlayerOffsetX           ; PlayerOffsetX = -4
-                    JMP @EndGetInput
-                @NoCollisionLeft:
+                BEQ @NoMapCollisionLeft
+                    EJECT_PLAYER_RIGHT
+                @NoMapCollisionLeft:
                     LDA PlayerX
                     STA ParamXPos
                     LDA PlayerY
                     STA ParamYPos
                     JSR Objects::IsAtXY
                     CMP #%11111111
-                    BEQ @NoObjectLeft
+                    BEQ @NoObjectCollisionLeft
                         TAX
                         JSR Objects::Bump
-                        LDA PlayerX
-                        CLC
-                        ADC #8
-                        STA PlayerX
-                        LDA #%11111100
-                        STA PlayerOffsetX
-                        JMP @EndGetInput
-                @NoObjectLeft:
+                        EJECT_PLAYER_RIGHT
+                @NoObjectCollisionLeft:
+                    JSR Mobs::IsAtXY
+                    CMP #%11111111
+                    BEQ @NoMobCollisionLeft
+                        TAX
+                        JSR Mobs::Bump
+                        EJECT_PLAYER_RIGHT
+                @NoMobCollisionLeft:
                     LDA #8
                     STA PlayerOffsetX           ; PlayerOffsetX = 8
                     JMP @EndGetInput
@@ -138,32 +133,27 @@
                 LDX PlayerX
                 LDY PlayerY
                 JSR Map::IsXYSolid
-                BEQ @NoCollisionRight
-                    LDA PlayerX
-                    SEC
-                    SBC #8
-                    STA PlayerX
-                    LDA #4
-                    STA PlayerOffsetX
-                    JMP @EndGetInput
-                @NoCollisionRight:
+                BEQ @NoMapCollisionRight
+                    EJECT_PLAYER_LEFT
+                @NoMapCollisionRight:
                     LDA PlayerX
                     STA ParamXPos
                     LDA PlayerY
                     STA ParamYPos
                     JSR Objects::IsAtXY
                     CMP #%11111111
-                    BEQ @NoObjectRight
+                    BEQ @NoObjectCollisionRight
                         TAX
                         JSR Objects::Bump
-                        LDA PlayerX
-                        SEC
-                        SBC #8
-                        STA PlayerX
-                        LDA #4
-                        STA PlayerOffsetX
-                        JMP @EndGetInput
-                    @NoObjectRight:
+                        EJECT_PLAYER_LEFT
+                    @NoObjectCollisionRight:
+                        JSR Mobs::IsAtXY
+                        CMP #%11111111
+                        BEQ @NoMobCollisionRight
+                            TAX
+                            JSR Mobs::Bump
+                            EJECT_PLAYER_LEFT
+                    @NoMobCollisionRight:
                         LDA #%11111000
                         STA PlayerOffsetX           ; PlayerOffsetX = -8
                         JMP @EndGetInput
@@ -183,32 +173,27 @@
                 LDX PlayerX 
                 LDY PlayerY
                 JSR Map::IsXYSolid
-                BEQ @NoCollisionUp
-                    LDA PlayerY
-                    CLC
-                    ADC #8
-                    STA PlayerY
-                    LDA #%11111100
-                    STA PlayerOffsetY
-                    JMP @EndGetInput
-                @NoCollisionUp:
+                BEQ @NoMapCollisionUp
+                    EJECT_PLAYER_DOWN
+                @NoMapCollisionUp:
                     LDA PlayerX
                     STA ParamXPos
                     LDA PlayerY
                     STA ParamYPos
                     JSR Objects::IsAtXY
                     CMP #%11111111
-                    BEQ @NoObjectUp
+                    BEQ @NoObjectCollisionUp
                         TAX
                         JSR Objects::Bump
-                        LDA PlayerY
-                        CLC
-                        ADC #8
-                        STA PlayerY
-                        LDA #%11111100
-                        STA PlayerOffsetY
-                        JMP @EndGetInput
-                @NoObjectUp:
+                        EJECT_PLAYER_DOWN
+                @NoObjectCollisionUp:
+                    JSR Mobs::IsAtXY
+                    CMP #%11111111
+                    BEQ @NoMobCollisionUp
+                        TAX
+                        JSR Mobs::Bump
+                        EJECT_PLAYER_DOWN
+                @NoMobCollisionUp:
                     LDA #8
                     STA PlayerOffsetY
                     JMP @EndGetInput
@@ -228,32 +213,27 @@
                 LDX PlayerX
                 LDY PlayerY
                 JSR Map::IsXYSolid
-                BEQ @NoCollisionDown
-                    LDA PlayerY
-                    SEC
-                    SBC #8
-                    STA PlayerY
-                    LDA #4
-                    STA PlayerOffsetY
-                    JMP @EndGetInput
-                @NoCollisionDown:
+                BEQ @NoMapCollisionDown
+                    EJECT_PLAYER_UP
+                @NoMapCollisionDown:
                     LDA PlayerX
                     STA ParamXPos
                     LDA PlayerY
                     STA ParamYPos
                     JSR Objects::IsAtXY
                     CMP #%11111111
-                    BEQ @NoObjectDown
+                    BEQ @NoObjectCollisionDown
                         TAX
                         JSR Objects::Bump
-                        LDA PlayerY
-                        SEC
-                        SBC #8
-                        STA PlayerY
-                        LDA #4
-                        STA PlayerOffsetY
-                        JMP @EndGetInput
-                @NoObjectDown:
+                        EJECT_PLAYER_UP
+                @NoObjectCollisionDown:
+                    JSR Mobs::IsAtXY
+                    CMP #%11111111
+                    BEQ @NoMobCollisionDown
+                        TAX
+                        JSR Mobs::Bump
+                        EJECT_PLAYER_UP
+                @NoMobCollisionDown:
                     LDA #%11111000
                     STA PlayerOffsetY
                     JMP @EndGetInput

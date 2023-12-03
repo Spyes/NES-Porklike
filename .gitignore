@@ -3,3 +3,4 @@
 *fdb
 *.labels.txt
 *.nes*
+*.o

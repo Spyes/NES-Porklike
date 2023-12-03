@@ -66,6 +66,9 @@
             CPX #MAX_MOBS * .sizeof(SMob)
             BEQ @EndLoop
 
+            LDA MobsArray+SMob::Type,X
+            BEQ @NextMob
+
             LDA MobsArray+SMob::Timer,X
             BNE @EndAnimate
                 LDA MobsArray+SMob::Type,X
@@ -125,6 +128,50 @@
         PLA
         STA PrevMobsOAMCount
         
+        RTS
+    .endproc
+
+    .proc IsAtXY
+        LDX #0
+        @ArrayLoop:
+            CPX #MAX_MOBS * .sizeof(SMob)
+            BNE :+
+                LDA #%11111111
+                JMP @EndRoutine
+            :
+
+            LDA MobsArray+SMob::Type,X
+            BEQ @NextMob
+
+            LDA MobsArray+SMob::XPos,X
+            CMP ParamXPos
+            BNE @NextMob
+                LDA MobsArray+SMob::YPos,X
+                CMP ParamYPos
+                BNE @NextMob
+                    TXA
+                    JMP @EndRoutine
+
+            @NextMob:
+                TXA
+                CLC
+                ADC #.sizeof(SMob)
+                TAX
+                JMP @ArrayLoop
+
+        @EndRoutine:
+        RTS
+    .endproc
+
+    .proc Bump
+        CPX #MAX_OBJECTS * .sizeof(SObject)
+        BCS @EndRoutine      ; Make sure X <= MAX_OBJECTS
+
+        @Remove:
+            LDA #MobType::NULL
+            STA MobsArray+SMob::Type,X
+
+        @EndRoutine:
         RTS
     .endproc
 

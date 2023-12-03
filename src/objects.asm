@@ -47,6 +47,10 @@
         @ArrayLoop:
             CPX #MAX_OBJECTS * .sizeof(SObject)
             BEQ @EndLoop
+
+            LDA ObjectsArray+SObject::Type,X
+            BEQ @NextObject
+
             LDA ObjectsArray+SObject::YPos,X
             SEC
             SBC #1
@@ -102,18 +106,17 @@
                 JMP @EndRoutine
             :
             LDA ObjectsArray+SObject::Type,X
-            CMP #ObjectType::NULL
             BEQ @NextObject
+
             LDA ObjectsArray+SObject::XPos,X
             CMP ParamXPos
-            BNE :+
+            BNE @NextObject
                 LDA ObjectsArray+SObject::YPos,X
                 CMP ParamYPos
-                BNE :+      ; X and Y match, set A to X (index in array)
+                BNE @NextObject      ; X and Y match, set A to X (index in array)
                     TXA
                     JMP @EndRoutine
-                :
-            :
+
             @NextObject:
                 TXA
                 CLC

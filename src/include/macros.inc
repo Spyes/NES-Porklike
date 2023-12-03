@@ -59,3 +59,43 @@
     LDA #%11111010
     STA SQ1_HI
 .endmacro
+
+.macro EJECT_PLAYER_UP
+    LDA PlayerY
+    SEC
+    SBC #8
+    STA PlayerY
+    LDA #4
+    STA PlayerOffsetY
+    JMP @EndGetInput
+.endmacro
+
+.macro EJECT_PLAYER_DOWN
+    LDA PlayerY
+    CLC
+    ADC #8
+    STA PlayerY
+    LDA #%11111100
+    STA PlayerOffsetY
+    JMP @EndGetInput
+.endmacro
+
+.macro EJECT_PLAYER_RIGHT
+    LDA PlayerX
+    CLC
+    ADC #8
+    STA PlayerX
+    LDA #%11111100
+    STA PlayerOffsetX
+    JMP @EndGetInput
+.endmacro
+
+.macro EJECT_PLAYER_LEFT
+    LDA PlayerX
+    SEC
+    SBC #8
+    STA PlayerX
+    LDA #4
+    STA PlayerOffsetX
+    JMP @EndGetInput
+.endmacro
