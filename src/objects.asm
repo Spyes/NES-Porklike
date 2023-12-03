@@ -72,7 +72,7 @@
         TYA             ; Y has number of bytes sent to OAM
         PHA
         @LoopTrailingTiles:
-            CPY PrevOAMCount
+            CPY PrevObjOAMCount
             BCS :+      ; if we are less than the total previously sent
                 LDA #$FF
                 STA (SprPtr),Y
@@ -86,7 +86,7 @@
                 JMP @LoopTrailingTiles
             :
         PLA
-        STA PrevOAMCount
+        STA PrevObjOAMCount
         
         RTS
     .endproc

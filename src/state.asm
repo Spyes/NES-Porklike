@@ -7,7 +7,8 @@
             LDA #0
             STA Frame
             STA Clock60
-            STA PrevOAMCount
+            STA PrevObjOAMCount
+            STA PrevMobsOAMCount
 
             JSR Map::Init
             JSR Player::Init
@@ -35,6 +36,7 @@
             CMP #States::PAUSED
             BEQ @Paused
             JSR Player::Update
+            JSR Mobs::Update
             JMP @Draw
 
         @Paused:
@@ -50,6 +52,7 @@
         @Draw:
             JSR Player::Draw
             JSR Objects::Draw
+            JSR Mobs::Draw
 
         WAIT_FOR_VBLANK
 

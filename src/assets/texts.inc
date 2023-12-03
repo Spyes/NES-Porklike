@@ -1,5 +1,5 @@
-Label:
-        ; "XXXXXXXXXXXXXX"
+;Label:
+;   .byte "XXXXXXXXXXXXXX"
 
 IntroTablet:
     .byte "  WELCOME TO  "

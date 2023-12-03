@@ -269,7 +269,7 @@
         BNE @EndAnimate
             LDX $0201
             INX
-            CPX #4
+            CPX #5
             BNE @SetTile
                 LDX #1
             @SetTile:

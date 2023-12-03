@@ -5,6 +5,7 @@
 .include "./include/structs.inc"
 
 .segment "ZEROPAGE"
+MobsArray:          .res MAX_MOBS * .sizeof(SMob)
 ObjectsArray:       .res MAX_OBJECTS * .sizeof(SObject)
 
 ;; Buttons
@@ -23,7 +24,8 @@ Frame:              .res 1      ; Reserve 1 byte to store the number of frames
 Clock60:            .res 1      ; Reserve 1 byte to store a counter that increments every second (60 frames)
 IsDrawComplete:     .res 1
 GameState:          .res 1
-PrevOAMCount:       .res 1
+PrevObjOAMCount:    .res 1
+PrevMobsOAMCount:   .res 1
 
 ;; Params
 ParamXPos:          .res 1
@@ -32,11 +34,10 @@ ParamAttribs:       .res 1
 ParamTileNum:       .res 1
 ParamType:          .res 1
 ParamPtr:           .res 2
-ParamLine:          .res 1
 
 ;; Pointers
-BgPtr:              .res 2      ; Reserve 2 bytes (16 bits) to store a pointer to the background address (address are always 2 bytes)
-BuffPtr:            .res 2      ; Pointer to the background buffer address - 16bits (lo,hi)
+BgPtr:              .res 2
+BuffPtr:            .res 2
 SprPtr:             .res 2
 
 ;; Temp
@@ -50,6 +51,7 @@ Temp:               .res 1
 .include "gfx.asm"
 .include "joypad.asm"
 .include "objects.asm"
+.include "mobs.asm"
 .include "map.asm"
 .include "player.asm"
 .include "state.asm"

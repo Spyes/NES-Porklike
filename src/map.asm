@@ -42,6 +42,22 @@
         STA ParamYPos
         JSR Objects::Add
 
+        LDA #ObjectType::CHEST_CLOSED_L
+        STA ParamType
+        LDA #56
+        STA ParamXPos
+        LDA #24
+        STA ParamYPos
+        JSR Objects::Add
+
+        LDA #MobType::SLIME
+        STA ParamType
+        LDA #32
+        STA ParamXPos
+        LDA #48
+        STA ParamYPos
+        JSR Mobs::Add
+
         RTS
     .endproc
 

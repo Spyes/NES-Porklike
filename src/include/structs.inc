@@ -10,12 +10,23 @@
     TABLET              = $08
 .endenum
 
+.enum MobType
+    NULL                = 0
+    SLIME               = $30
+.endenum
+
 .struct SObject
     Type        .byte
     XPos        .byte
     YPos        .byte
-    Metadata_LO .byte
-    Metadata_HI .byte
+.endstruct
+
+.struct SMob
+    Type        .byte
+    XPos        .byte
+    YPos        .byte
+    Timer       .byte
+    Tile        .byte
 .endstruct
 
 .enum States
