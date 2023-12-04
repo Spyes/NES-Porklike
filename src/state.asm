@@ -10,6 +10,9 @@
             STA PrevObjOAMCount
             STA PrevMobsOAMCount
 
+            LDA #10
+            STA AnimTimer
+
             JSR Map::Init
             JSR Player::Init
 
@@ -35,6 +38,15 @@
             LDA GameState
             CMP #States::PAUSED
             BEQ @Paused
+            LDA AnimTimer
+            BEQ @ResetAnimTimer
+                DEC AnimTimer
+                JMP @EndCheckAnimTimer
+            @ResetAnimTimer:
+                LDA #10
+                STA AnimTimer
+            @EndCheckAnimTimer:
+            
             JSR Player::Update
             JSR Mobs::Update
             JMP @Draw

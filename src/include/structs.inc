@@ -25,7 +25,6 @@
     Type        .byte
     XPos        .byte
     YPos        .byte
-    Timer       .byte
     Tile        .byte
 .endstruct
 

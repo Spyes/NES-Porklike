@@ -12,12 +12,13 @@ ObjectsArray:       .res MAX_OBJECTS * .sizeof(SObject)
 Buttons:            .res 1      ; Joypad buttons
 PrevButtons:        .res 1      ; Previous joypad buttons
 
+AnimTimer:          .res 1
+
 ;; Player
 PlayerX:            .res 1
 PlayerY:            .res 1
 PlayerOffsetX:      .res 1
 PlayerOffsetY:      .res 1
-PlayerAnimTimer:    .res 1
 
 ;; System
 Frame:              .res 1      ; Reserve 1 byte to store the number of frames 

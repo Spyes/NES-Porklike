@@ -25,8 +25,6 @@
             STA MobsArray+SMob::XPos,X
             LDA ParamYPos
             STA MobsArray+SMob::YPos,X
-            LDA #10         ;; TODO: Get dynamic anim timer length
-            STA MobsArray+SMob::Timer,X
 
         @EndRoutine:
             RTS
@@ -41,7 +39,7 @@
             LDA MobsArray+SMob::Type,X
             BEQ @NextMob
 
-            DEC MobsArray+SMob::Timer,X
+            ;; TODO: Add mob brain here
 
             @NextMob:
                 TXA
@@ -69,7 +67,7 @@
             LDA MobsArray+SMob::Type,X
             BEQ @NextMob
 
-            LDA MobsArray+SMob::Timer,X
+            LDA AnimTimer
             BNE @EndAnimate
                 LDA MobsArray+SMob::Type,X
                 CLC
@@ -83,8 +81,6 @@
                     LDA MobsArray+SMob::Type,X
                 @SetTile:
                     STA MobsArray+SMob::Tile,X
-                    LDA #10     ;; TODO
-                    STA MobsArray+SMob::Timer,X
             @EndAnimate:
 
             LDA MobsArray+SMob::YPos,X

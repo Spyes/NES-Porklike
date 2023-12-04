@@ -9,14 +9,10 @@
         STA PlayerOffsetX
         STA PlayerOffsetY
 
-        LDA #10
-        STA PlayerAnimTimer
-
         RTS
     .endproc
 
     .proc Update
-        DEC PlayerAnimTimer
         LDA PlayerOffsetX
         BNE :+
             LDA PlayerOffsetY
@@ -245,7 +241,7 @@
     .endproc
 
     .proc Animate
-        LDA PlayerAnimTimer
+        LDA AnimTimer
         BNE @EndAnimate
             LDX $0201
             INX
@@ -254,8 +250,6 @@
                 LDX #1
             @SetTile:
                 STX $0201
-                LDA #10
-                STA PlayerAnimTimer
         @EndAnimate:
         RTS
     .endproc
