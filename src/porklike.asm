@@ -1,6 +1,7 @@
 ;; TODO:
 ;;  - Flash mob when hit
 ;;  - Player death
+;;  - Fix attacking when atk > health (atk 4, hp 3)
 
 .include "./include/header.inc"
 .include "./include/consts.inc"
@@ -107,6 +108,13 @@ TextMessageBackgroudCopy:
     STA BuffPtr+0
     JSR GFX::BackgroundCopy
 
+StatsBackgroundCopy:
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$A0
+    STA BuffPtr+0
+    JSR GFX::BackgroundCopy
+
 EnablePPURendering:
     JSR GFX::EnablePPURendering
 
@@ -133,7 +141,7 @@ IRQ:
     RTI
 
 PaletteData:
-    .byte $0F,$00,$10,$20, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$17,$27,$37    ; Background
+    .byte $0F,$00,$10,$20, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$17,$27,$29    ; Background
     .byte $0F,$00,$10,$39, $0F,$01,$11,$21, $0F,$06,$16,$26, $0F,$0F,$29,$39    ; Sprite
 
 BackgroundData:

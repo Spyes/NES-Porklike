@@ -58,7 +58,7 @@
         STA ParamYPos
         LDA #%00100010
         STA ParamHP
-        LDA #%00000001
+        LDA #%00010001
         STA ParamAtkDef
         JSR Mobs::Add
 

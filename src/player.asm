@@ -9,11 +9,12 @@
         STA PlayerOffsetX
         STA PlayerOffsetY
 
-        LDA #%00100010
+        LDA #%01010011
         STA PlayerHP
 
         LDA #%00010001
         STA PlayerAtkDef
+        JSR GFX::BufferPlayerStats
 
         RTS
     .endproc
@@ -259,15 +260,25 @@
     .proc AttackMob
         TAX                 ; A holds Mob index
         LDA PlayerAtkDef
+        LSR
+        LSR
+        LSR
+        LSR
         STA ParamAtkDef
         JSR Mobs::Hit
         LDA MobsArray+SMob::AtkDef,X
-        AND #%00001111      ; LSB - attack
+        LSR
+        LSR
+        LSR
+        LSR
         STA Temp
         LDA PlayerHP
         SEC
         SBC Temp
         STA PlayerHP        ;; TODO: die
+
+        JSR GFX::BufferPlayerStats
+
         RTS
     .endproc
 .endscope

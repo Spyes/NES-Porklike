@@ -369,6 +369,119 @@
         RTS
     .endproc
 
+    .proc BufferPlayerStats
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$A0
+        STA BuffPtr+0
+
+        LDY #0
+
+    @Attack:
+        LDA #1
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$20
+        STA (BuffPtr),Y
+        INY
+        LDA #$D8
+        STA (BuffPtr),Y
+        INY
+
+        LDA PlayerAtkDef
+        LSR
+        LSR
+        LSR
+        LSR
+        CLC
+        ADC #$30
+        STA (BuffPtr),Y
+        INY
+
+    @Defense:
+        LDA #1
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$21
+        STA (BuffPtr),Y
+        INY
+        LDA #$38
+        STA (BuffPtr),Y
+        INY
+
+        LDA PlayerAtkDef
+        AND #%00001111
+        CLC
+        ADC #$30
+        STA (BuffPtr),Y
+        INY
+
+    @HP:
+        LDA #1
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$20
+        STA (BuffPtr),Y
+        INY
+        LDA #$78
+        STA (BuffPtr),Y
+        INY
+
+        LDA PlayerHP
+        AND #%00001111
+        CLC
+        ADC #$30
+        STA (BuffPtr),Y
+        INY
+
+    @MaxHP:
+        LDA #1
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$20
+        STA (BuffPtr),Y
+        INY
+        LDA #$7B
+        STA (BuffPtr),Y
+        INY
+
+        LDA PlayerHP
+        LSR
+        LSR
+        LSR
+        LSR
+        CLC
+        ADC #$30
+        STA (BuffPtr),Y
+        INY
+
+    @End:
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+        RTS
+    .endproc
+
+    .proc BufferPlayerHP
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$A9
+        STA BuffPtr+0
+
+        LDY #0
+
+        LDA #0
+        STA (BuffPtr),Y
+        INY
+
+        RTS
+    .endproc
+
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Subroutine to clear message panel tiles in the background using buffering
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
