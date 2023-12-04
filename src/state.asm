@@ -35,9 +35,6 @@
             JSR Joypad::ReadController
 
         @Update:
-            LDA GameState
-            CMP #States::PAUSED
-            BEQ @Paused
             LDA AnimTimer
             BEQ @ResetAnimTimer
                 DEC AnimTimer
@@ -50,16 +47,6 @@
             JSR Player::Update
             JSR Mobs::Update
             JMP @Draw
-
-        @Paused:
-            LDA Buttons
-            AND #BUTTON_START
-            BEQ @NotStartButton
-                JSR GFX::ClearTextPanel
-                JSR GFX::ClearText
-                LDA #States::GAMEPLAY
-                STA GameState
-            @NotStartButton:
 
         @Draw:
             JSR Player::Draw

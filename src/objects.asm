@@ -148,11 +148,6 @@
                 LDA #>IntroTablet2
                 STA ParamPtr+1
                 JSR GFX::BufferLine2Text
-
-                JSR GFX::BufferTextPanel
-
-                LDA #States::PAUSED
-                STA GameState
                 JMP @EndRoutine
             @NotTablet:
 

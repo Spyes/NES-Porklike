@@ -99,7 +99,17 @@ TextPanelBackgroundCopy:
 TextMessageBackgroudCopy:
     LDA #$07
     STA BuffPtr+1
-    LDA #$80
+    LDA #$B0
+    STA BuffPtr+0
+    JSR GFX::BackgroundCopy
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$90
+    STA BuffPtr+0
+    JSR GFX::BackgroundCopy
+    LDA #$07
+    STA BuffPtr+1
+    LDA #$70
     STA BuffPtr+0
     JSR GFX::BackgroundCopy
     LDA #$07
@@ -111,7 +121,7 @@ TextMessageBackgroudCopy:
 StatsBackgroundCopy:
     LDA #$07
     STA BuffPtr+1
-    LDA #$A0
+    LDA #$D0
     STA BuffPtr+0
     JSR GFX::BackgroundCopy
 

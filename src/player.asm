@@ -83,6 +83,7 @@
             LDA PrevButtons
             CMP Buttons
             BEQ @LeftButtonPrevPressed
+                JSR GFX::ClearText
                 LDA $0202
                 ORA #%01000000      ; Flip sprite horizontally
                 STA $0202
@@ -125,6 +126,7 @@
             LDA PrevButtons
             CMP Buttons
             BEQ @RightButtonPrevPressed
+                JSR GFX::ClearText
                 LDA $0202
                 AND #%10111111      ; Unflip sprite horizontally
                 STA $0202
@@ -167,6 +169,7 @@
             LDA PrevButtons
             CMP Buttons
             BEQ @UpButtonPrevPressed
+                JSR GFX::ClearText
                 LDA PlayerY
                 SEC
                 SBC #8
@@ -206,6 +209,7 @@
             LDA PrevButtons
             CMP Buttons
             BEQ @DownButtonPrevPressed
+                JSR GFX::ClearText
                 LDA PlayerY
                 CLC
                 ADC #8
@@ -258,6 +262,7 @@
     .endproc
 
     .proc AttackMob
+        PHA
         TAX                 ; A holds Mob index
         LDA PlayerAtkDef
         LSR
@@ -278,6 +283,29 @@
         STA PlayerHP        ;; TODO: die
 
         JSR GFX::BufferPlayerStats
+
+        LDA #>AttackedMob
+        STA ParamPtr+1
+        LDA #<AttackedMob
+        STA ParamPtr+0
+        JSR GFX::BufferLine1Text
+
+        LDA #>GotHit
+        STA ParamPtr+1
+        LDA #<GotHit
+        STA ParamPtr+0
+        JSR GFX::BufferLine2Text
+
+        PLA
+        TAX
+        LDA MobsArray+SMob::Type,X
+        BNE @MobStillAlive
+            LDA #>KilledMob
+            STA ParamPtr+1
+            LDA #<KilledMob
+            STA ParamPtr+0
+            JSR GFX::BufferLine3Text
+        @MobStillAlive:
 
         RTS
     .endproc

@@ -328,7 +328,7 @@
     .proc BufferLine2Text
         LDA #$07
         STA BuffPtr+1
-        LDA #$80
+        LDA #$70
         STA BuffPtr+0
 
         LDY #0
@@ -369,10 +369,98 @@
         RTS
     .endproc
 
+    .proc BufferLine3Text
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$90
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH   ; Legth
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$E2                ; First line
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        @Loop:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop
+            TYA
+            PHA
+            TXA
+            TAY
+            LDA (ParamPtr),Y
+            STA Temp
+            PLA
+            TAY
+            LDA Temp
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop
+        @EndLoop:
+
+        LDA #0
+        STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
+        INY
+
+        RTS
+    .endproc
+
+    .proc BufferLine4Text
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$B0
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH   ; Legth
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$23
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$22                ; First line
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        @Loop:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop
+            TYA
+            PHA
+            TXA
+            TAY
+            LDA (ParamPtr),Y
+            STA Temp
+            PLA
+            TAY
+            LDA Temp
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop
+        @EndLoop:
+
+        LDA #0
+        STA (BuffPtr),Y         ; Length=0 to indicate end of buffer
+        INY
+
+        RTS
+    .endproc
+
     .proc BufferPlayerStats
         LDA #$07
         STA BuffPtr+1
-        LDA #$A0
+        LDA #$D0
         STA BuffPtr+0
 
         LDY #0
@@ -697,7 +785,7 @@
     @ClearLine2:
         LDA #$07
         STA BuffPtr+1
-        LDA #$80
+        LDA #$70
         STA BuffPtr+0
 
         LDY #0
@@ -722,6 +810,64 @@
             INY
             JMP @Loop2
         @EndLoop2:
+
+    @ClearLine3:
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$90
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$22
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$E2
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        LDA #0
+        @Loop3:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop3
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop3
+        @EndLoop3:
+
+    @ClearLine4:
+        LDA #$07
+        STA BuffPtr+1
+        LDA #$B0
+        STA BuffPtr+0
+
+        LDY #0
+        LDA #TEXT_PANEL_WIDTH
+        STA (BuffPtr),Y
+        INY
+
+        LDA #$23
+        STA (BuffPtr),Y         ; Hi-byte of the PPU address to be updated
+        INY
+        LDA #$22
+        STA (BuffPtr),Y         ; Lo-byte of the PPU address to be updated
+        INY
+
+        LDX #0
+        LDA #0
+        @Loop4:
+            CPX #TEXT_PANEL_WIDTH
+            BEQ @EndLoop4
+            STA (BuffPtr),Y
+            INX
+            INY
+            JMP @Loop4
+        @EndLoop4:
 
         LDA #0
         STA (BuffPtr),Y
