@@ -9,6 +9,12 @@
         STA PlayerOffsetX
         STA PlayerOffsetY
 
+        LDA #%00100010
+        STA PlayerHP
+
+        LDA #%00010001
+        STA PlayerAtkDef
+
         RTS
     .endproc
 
@@ -103,8 +109,7 @@
                     JSR Mobs::IsAtXY
                     CMP #%11111111
                     BEQ @NoMobCollisionLeft
-                        TAX
-                        JSR Mobs::Bump
+                        JSR AttackMob
                         EJECT_PLAYER_RIGHT
                 @NoMobCollisionLeft:
                     LDA #8
@@ -146,8 +151,7 @@
                         JSR Mobs::IsAtXY
                         CMP #%11111111
                         BEQ @NoMobCollisionRight
-                            TAX
-                            JSR Mobs::Bump
+                            JSR AttackMob
                             EJECT_PLAYER_LEFT
                     @NoMobCollisionRight:
                         LDA #%11111000
@@ -186,8 +190,7 @@
                     JSR Mobs::IsAtXY
                     CMP #%11111111
                     BEQ @NoMobCollisionUp
-                        TAX
-                        JSR Mobs::Bump
+                        JSR AttackMob
                         EJECT_PLAYER_DOWN
                 @NoMobCollisionUp:
                     LDA #8
@@ -226,8 +229,7 @@
                     JSR Mobs::IsAtXY
                     CMP #%11111111
                     BEQ @NoMobCollisionDown
-                        TAX
-                        JSR Mobs::Bump
+                        JSR AttackMob
                         EJECT_PLAYER_UP
                 @NoMobCollisionDown:
                     LDA #%11111000
@@ -251,6 +253,21 @@
             @SetTile:
                 STX $0201
         @EndAnimate:
+        RTS
+    .endproc
+
+    .proc AttackMob
+        TAX                 ; A holds Mob index
+        LDA PlayerAtkDef
+        STA ParamAtkDef
+        JSR Mobs::Hit
+        LDA MobsArray+SMob::AtkDef,X
+        AND #%00001111      ; LSB - attack
+        STA Temp
+        LDA PlayerHP
+        SEC
+        SBC Temp
+        STA PlayerHP        ;; TODO: die
         RTS
     .endproc
 .endscope

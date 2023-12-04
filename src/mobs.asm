@@ -25,6 +25,10 @@
             STA MobsArray+SMob::XPos,X
             LDA ParamYPos
             STA MobsArray+SMob::YPos,X
+            LDA ParamHP
+            STA MobsArray+SMob::HP,X
+            LDA ParamAtkDef
+            STA MobsArray+SMob::AtkDef,X
 
         @EndRoutine:
             RTS
@@ -159,9 +163,19 @@
         RTS
     .endproc
 
-    .proc Bump
+    .proc Hit
         CPX #MAX_OBJECTS * .sizeof(SObject)
         BCS @EndRoutine      ; Make sure X <= MAX_OBJECTS
+
+        LDA MobsArray+SMob::HP,X
+        SEC
+        SBC ParamAtkDef
+        LDY #%00001111
+        STY Temp
+        BIT Temp            ; Will result in 0 if LSB (current HP) is 0000
+        BEQ @Remove
+            STA MobsArray+SMob::HP,X
+            JMP @EndRoutine
 
         @Remove:
             LDA #MobType::NULL

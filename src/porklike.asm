@@ -1,3 +1,7 @@
+;; TODO:
+;;  - Flash mob when hit
+;;  - Player death
+
 .include "./include/header.inc"
 .include "./include/consts.inc"
 .include "./include/reset.inc"
@@ -19,6 +23,8 @@ PlayerX:            .res 1
 PlayerY:            .res 1
 PlayerOffsetX:      .res 1
 PlayerOffsetY:      .res 1
+PlayerHP:           .res 1      ; LSB - current HP, MSB - max HP, %11110111 - Max: 15, current: 7
+PlayerAtkDef:       .res 1
 
 ;; System
 Frame:              .res 1      ; Reserve 1 byte to store the number of frames 
@@ -35,6 +41,8 @@ ParamAttribs:       .res 1
 ParamTileNum:       .res 1
 ParamType:          .res 1
 ParamPtr:           .res 2
+ParamHP:            .res 1
+ParamAtkDef:        .res 1
 
 ;; Pointers
 BgPtr:              .res 2
@@ -43,6 +51,9 @@ SprPtr:             .res 2
 
 ;; Temp
 Temp:               .res 1
+
+;; Memory left
+MemLeft:            .res 57
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PRG-ROM code located at $8000

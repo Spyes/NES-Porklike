@@ -25,7 +25,9 @@
     Type        .byte
     XPos        .byte
     YPos        .byte
-    Tile        .byte
+    HP          .byte   ;; LSB - current HP, MSB - max HP, %11110111 - Max: 15, current: 7
+    AtkDef      .byte   ;; LSB - attack, MSB - defp
+    Tile        .byte   ;; TODO: Perhaps move this to a global variable that keeps all animation offsets
 .endstruct
 
 .enum States

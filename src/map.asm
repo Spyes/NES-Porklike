@@ -56,6 +56,10 @@
         STA ParamXPos
         LDA #48
         STA ParamYPos
+        LDA #%00100010
+        STA ParamHP
+        LDA #%00000001
+        STA ParamAtkDef
         JSR Mobs::Add
 
         RTS
