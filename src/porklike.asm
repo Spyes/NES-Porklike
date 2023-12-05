@@ -7,6 +7,7 @@
 .include "./include/consts.inc"
 .include "./include/reset.inc"
 .include "./include/macros.inc"
+.include "./include/enums.inc"
 .include "./include/structs.inc"
 
 .segment "ZEROPAGE"
