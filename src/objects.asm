@@ -141,13 +141,13 @@
                 STA ParamPtr+0
                 LDA #>IntroTablet
                 STA ParamPtr+1
-                JSR GFX::BufferLine1Text
+                JSR GFX::BufferLine2Text
 
                 LDA #<IntroTablet2
                 STA ParamPtr+0
                 LDA #>IntroTablet2
                 STA ParamPtr+1
-                JSR GFX::BufferLine2Text
+                JSR GFX::BufferLine3Text
                 JMP @EndRoutine
             @NotTablet:
 

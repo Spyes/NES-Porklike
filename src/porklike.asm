@@ -10,14 +10,13 @@
 .include "./include/structs.inc"
 
 .segment "ZEROPAGE"
-MobsArray:          .res MAX_MOBS * .sizeof(SMob)
-ObjectsArray:       .res MAX_OBJECTS * .sizeof(SObject)
-
 ;; Buttons
 Buttons:            .res 1      ; Joypad buttons
 PrevButtons:        .res 1      ; Previous joypad buttons
 
+;; Animation
 AnimTimer:          .res 1
+AnimFrame:          .res 1
 
 ;; Player
 PlayerX:            .res 1
@@ -50,11 +49,15 @@ BgPtr:              .res 2
 BuffPtr:            .res 2
 SprPtr:             .res 2
 
+;; Arrays
+MobsArray:          .res MAX_MOBS * .sizeof(SMob)
+ObjectsArray:       .res MAX_OBJECTS * .sizeof(SObject)
+
 ;; Temp
 Temp:               .res 1
 
 ;; Memory left
-MemLeft:            .res 57
+MemLeft:            .res 71
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; PRG-ROM code located at $8000

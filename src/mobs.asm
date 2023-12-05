@@ -20,7 +20,6 @@
         @AddNewMob:
             LDA ParamType
             STA MobsArray+SMob::Type,X
-            STA MobsArray+SMob::Tile,X
             LDA ParamXPos
             STA MobsArray+SMob::XPos,X
             LDA ParamYPos
@@ -71,27 +70,13 @@
             LDA MobsArray+SMob::Type,X
             BEQ @NextMob
 
-            LDA AnimTimer
-            BNE @EndAnimate
-                LDA MobsArray+SMob::Type,X
-                CLC
-                ADC #4
-                STA Temp
-                LDA MobsArray+SMob::Tile,X
-                CLC
-                ADC #1
-                CMP Temp
-                BNE @SetTile
-                    LDA MobsArray+SMob::Type,X
-                @SetTile:
-                    STA MobsArray+SMob::Tile,X
-            @EndAnimate:
-
             LDA MobsArray+SMob::YPos,X
             SEC
             SBC #1
             STA ParamYPos
-            LDA MobsArray+SMob::Tile,X
+            LDA MobsArray+SMob::Type,X
+            CLC
+            ADC AnimFrame
             STA ParamTileNum
             LDA #%00000011
             STA ParamAttribs

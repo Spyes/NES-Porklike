@@ -9,6 +9,7 @@
             STA Clock60
             STA PrevObjOAMCount
             STA PrevMobsOAMCount
+            STA AnimFrame
 
             LDA #10
             STA AnimTimer
@@ -42,6 +43,12 @@
             @ResetAnimTimer:
                 LDA #10
                 STA AnimTimer
+                INC AnimFrame
+                LDA AnimFrame
+                CMP #4
+                BNE @EndCheckAnimTimer
+                    LDA #0
+                    STA AnimFrame
             @EndCheckAnimTimer:
             
             JSR Player::Update

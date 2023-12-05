@@ -14,3 +14,6 @@ GotHit:
 
 KilledMob:
     .byte "*KILLED MOB!  "
+
+GotEXP:
+    .byte "*GOT 10 EXP!  "
